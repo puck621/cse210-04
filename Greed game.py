@@ -1,4 +1,6 @@
 
+# VERY MUCH WORK IN PROGRESS
+
 # import pygame module in this program 
 import pygame, random, sys
   
