@@ -51,19 +51,17 @@ class Director:
         Args:
             cast (Cast): The cast of actors.
         """
-        banner = cast[ "banners" ][0]
         robot = cast[ "robots" ][0]
         artifacts = cast[ "artifacts" ]
 
-        banner.text = ""
         max_x = self._video_service.width
         max_y = self._video_service.height
-        robot.move_next(max_x, max_y)
+        robot.update(max_x, max_y)
 
         for artifact in artifacts:
-            artifact.move_next(max_x, max_y)
+            artifact.update(max_x, max_y)
             if robot.position == artifact.position:
-                banner.text = artifact.message
+                pass
 
     def _do_outputs(self, cast):
         """Draws the actors on the screen.
