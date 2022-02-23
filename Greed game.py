@@ -1,7 +1,9 @@
 
 # VERY MUCH WORK IN PROGRESS
 
+
 # import pygame module in this program 
+from tkinter.messagebox import YES
 import pygame, random, sys
   
 pygame.init()
@@ -22,20 +24,30 @@ class Block(pygame.sprite.Sprite):
     def __init__(self, color, width, height):
         super().__init__()
         self.image = pygame.Surface([width, height])
-        self.image.fill(color)
+        
         self.rect = self.image.get_rect()
- 
+        
+        pygame.draw.rect(self.image,color,self.rect,2)
+
     def pos(self):
         self.rect.y = random.randrange(0, 790)
-        self.rect.x = random.randrange(0, 790)
+        self.rect.x = random.randrange(0, 790) 
 
-class Gem(Block):
+class Gem(pygame.sprite.Sprite):
+
+    def __init__(self, color, width, height):
+        super().__init__()
+        self.image = pygame.Surface([width, height])
+        pygame.draw.circle(self.image, color,(width//2, height//2),5)
+        self.rect = self.image.get_rect()
+        
     def pos(self):
         self.rect.y = random.randrange(0, 790)
         self.rect.x = random.randrange(0, 790)
 
 class Player(Block):
     def update(self):
+        pygame.Surface.fill(self.image, (255,0,0))
         self.rect.x = x
         self.rect.y = y
 
@@ -43,29 +55,31 @@ block_list = pygame.sprite.Group()
 gem_list = pygame.sprite.Group()
 all_sprites_list = pygame.sprite.Group()
 
-for i in range(20):
-    block = Block((255,255,255), 10, 10)
+for i in range(50):
+    r = random.randrange(0,255)
+    g = random.randrange(0,255)
+    b = random.randrange(0,255)
 
-    block.rect.x = random.randrange(0,790)
-    block.rect.y = random.randrange(0,790)
- 
-    block_list.add(block)
-    all_sprites_list.add(block)
-
-for i in range(20):
-    gem = Gem((0,0,255), 10, 10)
+    block = Block((r,g,b), 10, 10)
+    gem = Gem((r, g, b), 10, 10)
 
     gem.rect.x = random.randrange(0,790)
     gem.rect.y = random.randrange(0,790)
- 
+
+    block.rect.x = random.randrange(0,790)
+    block.rect.y = random.randrange(0,790)
+
+    block_list.add(block)
+    all_sprites_list.add(block)
+    
     gem_list.add(gem)
     all_sprites_list.add(gem)
 
 
-player = Player((255,0,0),20,20)
+player = Player((255,0,0),15,15)
 all_sprites_list.add(player)
 
-smallfont = pygame.font.SysFont('corbel',15)
+smallfont = pygame.font.SysFont('ariel',25)
 
 
 while run:
@@ -91,18 +105,6 @@ while run:
 
     win.fill((0, 0, 0))
     
-    #arrowImg = pygame.image.load('arrow.png')
-    #playerImg = pygame.transform.scale(arrowImg, (20,20))
-    #arrow = pygame.sprite.Sprite()
-    #arrow.image = playerImg.convert()
-    #arrow.rect=arrow.image.get_rect()
-    #arrow.rect.midbottom = [x,y]
-    #win.blit(arrow.image,arrow.rect)
- 
-
-    #all_gems = pygame.sprite.group()
-    #gemImg = pygame.image.load('gem.png')
-    #gem = pygame.transform.scale(gemImg, (30, 30))
     all_sprites_list.update()
     blocks_hit_list = pygame.sprite.spritecollide(player, block_list, False)
     gem_hit_list = pygame.sprite.spritecollide(player, gem_list, False)
