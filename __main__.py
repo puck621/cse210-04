@@ -22,36 +22,50 @@ ROWS = 40
 CAPTION = "Greed"
 WHITE = Color(255, 255, 255)
 DEFAULT_ARTIFACTS = 40
-
+DEFAULT_ROCKS = 25
 
 def main():
     # create the cast
     cast = {}
 
     # create the robot
-    x = int(MAX_X / 2)
-    y = int(MAX_Y / 2)
-    position = Point(x, y)
-
-    robot = Actor("#", FONT_SIZE, WHITE, position)
+    robot = Actor("#", FONT_SIZE, WHITE, Point(int(MAX_X / 2), MAX_Y - CELL_SIZE))
     cast["robots"] =  [ robot ]
 
     cast["artifacts"] = []
     for _ in range(DEFAULT_ARTIFACTS):
-        text = chr(random.randint(33, 126))
+        text = "*"
+        position = Point(random.randint(1, COLS - 1), random.randint(1, ROWS - 1)) * CELL_SIZE
 
-        x = random.randint(1, COLS - 1)
-        y = random.randint(1, ROWS - 1)
-        position = Point(x, y)
-        position = position * CELL_SIZE
+        color = Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
-        r = random.randint(0, 255)
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
-        color = Color(r, g, b)
+        artifact = Gem(
+                text,
+                FONT_SIZE,
+                color,
+                position,
+                velocity=(2 * Point(0, 1) * random.random()))
 
-        artifact = Gem( text, FONT_SIZE, color, position, velocity=(Point(0, 1) * random.random()))
         cast["artifacts"].append(artifact)
+    cast["banner"] = [ Actor("", FONT_SIZE, WHITE, Point(CELL_SIZE, 0)) ]
+
+    cast["rocks"] = []
+    for _ in range(DEFAULT_ROCKS):
+        text = "0"
+        position = Point(random.randint(1, COLS - 1), random.randint(1, ROWS -
+            1)) * CELL_SIZE
+
+        color = Color(random.randint(0, 255), random.randint(0, 255),
+                random.randint(0, 255))
+
+        rock = Gem(
+                text,
+                FONT_SIZE,
+                color,
+                position,
+                velocity=(2 * Point(0, 1) * random.random()))
+
+        cast["rocks"].append(rock)
 
     # start the game
     keyboard_service = KeyboardService(CELL_SIZE)

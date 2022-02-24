@@ -130,3 +130,4 @@ dmypy.json
 
 #Session.vim
 Session.vim
+pyproject.toml
