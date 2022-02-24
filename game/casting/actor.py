@@ -27,7 +27,7 @@ class Actor:
     def update(self, max_x, max_y, cell_size = 15):
         """Moves the actor to its next position according to its velocity. Will wrap the position 
         from one side of the screen to the other when it reaches the given maximum x and y values.
-        
+
         Args:
             max_x (int): The maximum x value.
             max_y (int): The maximum y value.

@@ -1,6 +1,7 @@
 #import keyboard_service
 from ..services.keyboard_service import KeyboardService
 from ..services.video_service import VideoService
+from ..casting.cast import Cast
 
 class Director:
     """A person who directs the game. 
@@ -22,7 +23,7 @@ class Director:
         self._keyboard_service = keyboard_service
         self._video_service = video_service
 
-    def start_game(self, cast):
+    def start_game(self, cast: Cast):
         """Starts the game using the given cast. Runs the main game loop.
 
         Args:
@@ -35,41 +36,50 @@ class Director:
             self._do_outputs(cast)
         self._video_service.close_window()
 
-    def _get_inputs(self, cast):
+    def _get_inputs(self, cast: Cast):
         """Gets directional input from the keyboard and applies it to the robot.
 
         Args:
             cast (Cast): The cast of actors.
         """
-        robot = cast[ "robots" ][0]
+        robot = cast.get_first_actor("robots")
         velocity = self._keyboard_service.get_direction()
         robot.velocity = velocity
 
-    def _do_updates(self, cast):
+    def _do_updates(self, cast: Cast):
         """Updates the robot's position and resolves any collisions with artifacts.
 
         Args:
             cast (Cast): The cast of actors.
         """
-        robot = cast[ "robots" ][0]
-        artifacts = cast[ "artifacts" ]
+        robot = cast.get_first_actor("robots")
+        artifacts = cast.get_actors("artifacts")
+        rocks = cast.get_actors("rocks")
 
         max_x = self._video_service.width
         max_y = self._video_service.height
-        robot.update(max_x, max_y)
+        cast.update(max_x, max_y)
+
+        banner = cast.get_first_actor("banner")
+        banner.text = "Score: " + str(robot.score)
 
         for artifact in artifacts:
-            artifact.update(max_x, max_y)
             if robot.position == artifact.position:
-                pass
+                cast.remove_actor("artifacts", artifact)
+                robot.score += 1
 
-    def _do_outputs(self, cast):
+        for rock in rocks:
+            if robot.position == rock.position:
+                robot.score -= 1
+                cast.remove_actor("rocks", rock)
+
+    def _do_outputs(self, cast: Cast):
         """Draws the actors on the screen.
 
         Args:
             cast (Cast): The cast of actors.
         """
         self._video_service.clear_buffer()
-        actors = [ actor for actors in cast.values() for actor in actors]
+        actors = cast.get_all_actors()
         self._video_service.draw_actors(actors)
         self._video_service.flush_buffer()
