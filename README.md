@@ -29,7 +29,8 @@ The game must remain generally true to the order of play described earlier.
 
 
 Group includes:  
- - Finley Grant Jarvis: 
- - Lowry Williams: 
- - Kelsey Scott: 
- - Emmett Hart: 
+ - Group collaborated via Slack (group-thursday-5pm) and met live to complete program
+ - Finley Grant Jarvis: Joined live and built base.
+ - Lowry Williams: Joined live, planned class structure/inheretance, and organized inheritance. 
+ - Kelsey Scott: Joined live. Created repository, plan structure, and helped edit bugs.
+ - Emmett Hart: Joined live. Wrote out remaining programming and wrote commentary.
